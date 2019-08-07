@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Test</title>
+	<script type="text/javascript">
+// 选择排序
+function selectSort(arr) {
+	var arrTest = [];
+	Object.assign(arrTest,arr);
+	var i, j, min, num;
+    for (i = 0; i < arrTest.length - 1; i++) {
+    	min = i;
+    	for (j = i + 1 ; j < arrTest.length; j++) {
+    		if (arrTest[j] < arrTest[min]) {
+    			min = j;
+    		}
+    	}
+    	if (min != i) {
+    		num = arrTest[i];
+    		arrTest[i] = arrTest[min];
+    		arrTest[min] = num;
+    	}
+    }
+    var str = "选择排序:  "
+	for (var i = 0; i < arrTest.length; i++) {
+		str += arrTest[i] + "  ";
+	}
+	console.log(str);
+}
+/*
+通过比较，从arr[i]——arr[arr.length - 1]中选出第(i+1)小的，替代arr[i];
+*/
+// 归并排序
+function mergeSort(arr) {
+	function mergeArray(arr, first, mid, last, temp) {
+      	var i = first; 
+      	var m = mid;
+        var j = mid + 1;
+      	var n = last;
+      	var k = 0;
+      	while (i <= m && j <= n) {
+        	if(arr[i] < arr[j]) {
+          		temp[k++] = arr[i++];
+        	} else {
+          		temp[k++] = arr[j++];
+        	}
+      	}
+      	while (i <= m) {
+        	temp[k++] = arr[i++];
+      	}
+      	while (j <= n) {
+        	temp[k++] = arr[j++];
+      	} 
+      	for (var l = 0; l < k; l++) {
+        	arr[first + l] = temp[l];
+      	}
+      	return arr;
+    }    
+    function sort(arr, first, last, temp) {    
+      	if (first < last) {
+        	var mid = Math.floor((first+last) / 2);
+        	sort(arr, first, mid, temp);    
+        	sort(arr, mid + 1, last, temp);   
+        	arr = mergeArray(arr, first, mid, last, temp);  
+      	}    
+      	return arr;
+    }
+    var arrTest = [];
+	var temp = [];
+	Object.assign(arrTest, arr);
+    sort(arrTest, 0 ,arrTest.length - 1, temp);
+    var str = "归并排序:  "
+	for (var i = 0; i < arrTest.length; i++) {
+		str += arrTest[i] + "  ";
+	}
+	console.log(str);
+}
+/*
+将数组从中间开始拆分，分成两个子数组，子数组再分子数组……
+有序化最小的子数组，有序合并，成长度更长的子数组，再有序合并……
+用递归实现。
+*/
+// 快排
+function quickSort(arr) {
+	var arrTest = [];
+	Object.assign(arrTest,arr);
+    function sort(arrTest, begin, end) {
+        var i, j, pivot;        
+        if (begin < end) {
+            i = begin, j = end, pivot = arrTest[begin];
+            while (i < j) {
+                while (i < j && arrTest[j] >= pivot) {
+                    j--;
+                }
+                arrTest[i] = arrTest[j];
+                while (i < j && arrTest[i] <= pivot) {
+                    i++;
+                }
+                arrTest[j] = arrTest[i];
+            }
+            arrTest[i] = pivot;
+            sort(arrTest, begin, i - 1);
+            sort(arrTest, i + 1, end);
+        }
+    }        
+    sort(arrTest, 0, arrTest.length - 1);        
+    var str = "快速排序:  "
+	for (var i = 0; i < arrTest.length; i++) {
+		str += arrTest[i] + "  ";
+	}
+	console.log(str);
+}
+/*
+将数组分割成两部分，一部分的所有数据都比另一部分大，再用相同方法，用递归进行分割。
+*/
+// 生成树
+function createNode(val) {
+  	return {
+    	val,
+    	left: null,
+    	right: null
+  	}
+}
+function createTree() {
+	let root = createNode(1);
+	let t1 = root.left = createNode(2);
+	let t2 = root.right = createNode(3);
+	let t3 = t1.left = createNode(4);
+	let t4 = t1.right = createNode(5);
+	let t5 = t2.left = createNode(6);
+	let t6 = t2.right = createNode(7);
+	let t7 = t3.left = createNode(8);
+	let t8 = t3.right = createNode(9);
+	let t9 = t4.left = createNode(10);
+	t4.right = createNode(11);
+	t5.left = createNode(12);
+	t5.right = createNode(13);
+	t6.left = createNode(14);
+	t6.right = createNode(15);
+	// t7.left = createNode(16);
+	// t7.right = createNode(17);
+	// t8.left = createNode(18);
+	// t8.right = createNode(19);
+	// t9.left = createNode(20);
+	return root;
+}
+/*
+用一个数组变量去放每一层的节点，通过数组长度判断该层是否存在。
+根据数组长度循环输出该层节点的值，再通过该层节点的子节点生成下一层的节点数组。
+*/
+// 树的层序遍历
+function SeqTravel(root) {
+	var arr = [root];
+	var arrResult = [];
+
+	while (arr.length != 0) {
+		var arrTest = [];
+		for (var i = 0; i < arr.length; i++) {
+			arrResult.push(arr[i].val);
+			if (arr[i].left) {
+				arrTest.push(arr[i].left);
+			}
+			if (arr[i].right) {
+				arrTest.push(arr[i].right);
+			}
+		}
+		arr = arrTest;
+	}
+	var str = "树的层序遍历:  "
+	for (var i = 0; i < arrResult.length; i++) {
+		str += arrResult[i] + "  ";
+	}
+	console.log(str);
+}
+/*
+用一个数组变量去放每一层的节点，通过数组长度判断该层是否存在。
+根据数组长度循环输出该层节点的值，再通过该层节点的子节点生成下一层的节点数组。
+用一个变量judge，判断用push()方法还是unshift()方法去插入节点生成下一层的节点数组。
+*/
+// 树的齿锯层序遍历
+function serrataSeqTravel(root) {
+	var arr = [root];
+	var arrResult = [];
+	var judge = true;
+
+	while (arr.length != 0) {
+		var arrTest = [];
+		if (judge) {
+			for (var i = arr.length - 1; i > -1; i--) {
+				arrResult.push(arr[arr.length - 1 - i].val);
+				if (arr[i].left) {
+					arrTest.push(arr[i].left);
+				}
+				if (arr[i].right) {
+					arrTest.push(arr[i].right);
+				}
+			}
+			judge = !judge;
+		} else {
+			for (var i = 0; i < arr.length; i++) {
+				arrResult.push(arr[i].val);
+				if (arr[i].left) {
+					arrTest.unshift(arr[i].left);
+				}
+				if (arr[i].right) {
+					arrTest.unshift(arr[i].right);
+				}
+			}
+			judge = !judge;
+		}
+		arr = arrTest;
+	}
+    var str = "树的齿锯层序遍历:  "
+	for (var i = 0; i < arrResult.length; i++) {
+		str += arrResult[i] + "  ";
+	}
+	console.log(str);
+}
+let root = createTree();
+var arr = [];
+for (var i = 0; i < 15; i++) {
+	arr[i] = Math.floor(Math.random() * 1000) % 100;
+}
+var str = "原数组:  "
+for (var i = 0; i < arr.length; i++) {
+	str += arr[i] + "  ";
+}
+console.log(str);
+selectSort(arr);
+quickSort(arr);
+mergeSort(arr);
+SeqTravel(root);
+serrataSeqTravel(root);
+	</script>
+</head>
+<body>
+
+</body>
+</html>
